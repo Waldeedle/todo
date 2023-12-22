@@ -1,15 +1,21 @@
 package private_api
 
 import (
-	"github.com/gofiber/fiber/v2"
-	"github.com/waldeedle/reporting/internal/middleware"
+	"net/http"
+
+	"github.com/labstack/echo-contrib/pprof"
+	"github.com/labstack/echo/v4"
 )
 
-func AddRoutes(app *fiber.App) error {
-	middleware.AddPPROFToApp(app)
+func AddRoutes(e *echo.Echo) error {
+	tools := e.Group("/tools")
 
-	app.Get("/tools", func(c *fiber.Ctx) error {
-		return c.SendString("Shhhhh Secret Tools 🤫!")
+	//Add pprof routes
+	pprof.Register(e, "/tools/pprof")
+
+	//Add custom routes
+	tools.GET("", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Shhhhh Secret Tools 🤫!")
 	})
 
 	return nil

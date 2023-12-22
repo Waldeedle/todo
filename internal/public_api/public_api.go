@@ -1,10 +1,21 @@
 package public_api
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/a-h/templ"
+	"github.com/labstack/echo/v4"
+	"github.com/waldeedle/reporting/internal/templates"
+)
 
-func AddRoutes(app *fiber.App) error {
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World 👋!")
+func HTML(c echo.Context, comp templ.Component) error {
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+	return comp.Render(c.Request().Context(), c.Response().Writer)
+}
+
+func AddRoutes(e *echo.Echo) error {
+	e.Static("/static", "internal/assets")
+
+	e.GET("/", func(c echo.Context) error {
+		return HTML(c, templates.Page())
 	})
 
 	return nil
