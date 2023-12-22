@@ -8,3 +8,5 @@ __debug_bin*
 vendor/
 go.work
 .DS_Store
+cmd/**/bin/*
+db/todo.db
