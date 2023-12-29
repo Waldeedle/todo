@@ -1,10 +1,11 @@
 package templates
 
 templ Page () {
-	<html>
+	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=2.0"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<link rel="icon" type="image/x-icon" href="static/favicon.ico"/>
 			<title>My First HTMX Page</title>
 			<script src="static/js/htmx.min.js" type="text/javascript"></script>
 			//todo: update build process to remove unused css
@@ -12,7 +13,19 @@ templ Page () {
 			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
 		<body class="container max-w-wl mx-auto">
-			<h1 class="font-bold text-2xl my-16">Hello World!</h1>
+			<h1 class="font-bold text-2xl my-16">HTMx TODO!</h1>
+			<form class="grid grid-cols-7 m-4 gap-2">
+				<input class="col-span-5 input input-bordered" type="text" name="title" placeholder="What are we doing?" label="title"/>
+				<button
+ 					class="btn btn-accent col-span-2"
+ 					hx-post="/create"
+ 					hx-target="#todos"
+ 					hx-swap="innerHTML"
+				>
+					Create Todo
+				</button>
+			</form>
+			<div id="todos" class="my-8"></div>
 		</body>
 	</html>
 }
