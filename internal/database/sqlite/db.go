@@ -2,18 +2,23 @@ package db
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func AddDB() {
-	db, err := sql.Open(
-		"sqlite3",
-		"user:password@tcp(127.0.0.1:3306)/hello",
-	)
+func AddDB() (*sql.DB, error) {
+	db, err := sql.Open("sqlite3", "./db/todo.db")
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("Could not connect to db", err)
+		return nil, err
 	}
-	defer db.Close()
+
+	err = db.Ping()
+	if err != nil {
+		fmt.Println("Could not ping db", err)
+		return nil, err
+	}
+
+	return db, nil
 }
