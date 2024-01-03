@@ -3,7 +3,7 @@ package public_api
 import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/waldeedle/reporting/internal/templates"
+	"github.com/waldeedle/todo/internal/templates"
 )
 
 func HTML(c echo.Context, comp templ.Component) error {

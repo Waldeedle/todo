@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
-	db "github.com/waldeedle/reporting/internal/database/sqlite"
-	"github.com/waldeedle/reporting/internal/handlers"
-	"github.com/waldeedle/reporting/internal/private_api"
-	"github.com/waldeedle/reporting/internal/public_api"
-	"github.com/waldeedle/reporting/internal/todo"
+	db "github.com/waldeedle/todo/internal/database/sqlite"
+	"github.com/waldeedle/todo/internal/handlers"
+	"github.com/waldeedle/todo/internal/private_api"
+	"github.com/waldeedle/todo/internal/public_api"
+	"github.com/waldeedle/todo/internal/todo"
 )
 
 func main() {

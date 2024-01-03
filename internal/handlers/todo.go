@@ -3,8 +3,8 @@ package handlers
 import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	"github.com/waldeedle/reporting/internal/templates"
-	"github.com/waldeedle/reporting/internal/todo"
+	"github.com/waldeedle/todo/internal/templates"
+	"github.com/waldeedle/todo/internal/todo"
 )
 
 type TodoHandler struct {

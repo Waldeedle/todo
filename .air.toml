@@ -1,8 +1,8 @@
 root = "."
-tmp_dir = "./cmd/reporting/bin"
+tmp_dir = "./cmd/todo/bin"
 
 [build]
-  bin = "./cmd/reporting/bin/reporting"
+  bin = "./cmd/todo/bin/todo"
   cmd = "make build"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor"]

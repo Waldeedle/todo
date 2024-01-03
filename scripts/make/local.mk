@@ -7,8 +7,8 @@ provision-local: ## provision local environment
 
 build: ## build the service
 	templ generate \
-	&& cd cmd/reporting \
-	&& go build -o bin/reporting
+	&& cd cmd/todo \
+	&& go build -o bin/todo
 
 css: ## build minified css
 	tailwindcss -i $(ROOT_PATH)/internal/assets/input.css -o $(ROOT_PATH)/internal/assets/output.css --minify
