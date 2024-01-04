@@ -18,7 +18,7 @@ func main() {
 		panic(err)
 	}
 
-	todoService := todo.NewTodoService(db)
+	todoService := todo.NewRepository(db)
 	//need to refactor to move this
 	handlers.NewTodoHandler(e, todoService)
 

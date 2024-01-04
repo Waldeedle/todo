@@ -10,10 +10,10 @@ import (
 )
 
 type TodoHandler struct {
-	todoService *todo.TodoService
+	todoService todo.Repository
 }
 
-func NewTodoHandler(e *echo.Echo, todoService *todo.TodoService) {
+func NewTodoHandler(e *echo.Echo, todoService todo.Repository) {
 	todoHandler := &TodoHandler{
 		todoService: todoService,
 	}
@@ -53,7 +53,7 @@ func (t *TodoHandler) CreateHandler(c echo.Context) error {
 	if err := c.Bind(params); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
-	err := t.todoService.Create(params.Title)
+	_, err := t.todoService.Create(params.Title)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (t *TodoHandler) GetHandler(c echo.Context) error {
 	if err := c.Bind(params); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
-	_, err := t.todoService.Get(params.ID)
+	_, err := t.todoService.GetById(params.ID)
 	if err != nil {
 		return err
 	}
@@ -88,7 +88,7 @@ func (t *TodoHandler) UpdateHandler(c echo.Context) error {
 	if err := c.Bind(params); err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}
-	err := t.todoService.Update(params.ID, params.Title, params.Completed)
+	_, err := t.todoService.Update(params.ID, params.Title, params.Completed)
 	if err != nil {
 		return err
 	}

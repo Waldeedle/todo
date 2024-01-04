@@ -1,76 +1,119 @@
 package todo
 
-import "database/sql"
+import (
+	"database/sql"
 
-type TodoService struct {
+	"github.com/waldeedle/todo/internal/models"
+)
+
+type Repository interface {
+	Create(title string) (*models.Todo, error)
+	GetAll() ([]*models.Todo, error)
+	GetById(id int) (*models.Todo, error)
+	GetByAccountId(accountID int) (*models.Todo, error)
+	//todo: potentially add partial title search
+	GetByTitle(title string) (*models.Todo, error)
+	GetByIsCompleted(isCompleted bool) ([]*models.Todo, error)
+	Update(id int, title string, completed bool) (*models.Todo, error)
+	Delete(id int) error
+}
+
+type repository struct {
 	db *sql.DB
 }
 
-type Todo struct {
-	ID        int
-	Title     string
-	Completed bool
-}
-
-func NewTodoService(db *sql.DB) *TodoService {
-	return &TodoService{
+func NewRepository(db *sql.DB) Repository {
+	return &repository{
 		db: db,
 	}
 }
 
-func (t *TodoService) Create(title string) error {
-	_, err := t.db.Exec("INSERT INTO todos (title, is_completed) VALUES ($1, $2)", title, false)
-	if err != nil {
-		return err
-	}
+const todosTable = "todos"
 
-	return nil
-}
-
-func (t *TodoService) GetAll() ([]Todo, error) {
-	rows, err := t.db.Query("SELECT id, title, is_completed FROM todos")
+func (r *repository) Create(title string) (*models.Todo, error) {
+	result, err := r.db.Exec("INSERT INTO todos (title) VALUES (?)", title)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 
-	todos := []Todo{}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	return r.GetById(int(id))
+}
+
+func (r *repository) GetAll() ([]*models.Todo, error) {
+	rows, err := r.db.Query("SELECT * FROM todos")
+	if err != nil {
+		return nil, err
+	}
+
+	return r.scanTodos(rows)
+}
+
+func (r *repository) GetById(id int) (*models.Todo, error) {
+	row := r.db.QueryRow("SELECT * FROM todos WHERE id = ?", id)
+	return r.scanTodo(row)
+}
+
+func (r *repository) GetByAccountId(accountID int) (*models.Todo, error) {
+	row := r.db.QueryRow("SELECT * FROM todos WHERE account_id = ?", accountID)
+	return r.scanTodo(row)
+}
+
+func (r *repository) GetByTitle(title string) (*models.Todo, error) {
+	row := r.db.QueryRow("SELECT * FROM todos WHERE title = ?", title)
+	return r.scanTodo(row)
+}
+
+func (r *repository) GetByIsCompleted(isCompleted bool) ([]*models.Todo, error) {
+	rows, err := r.db.Query("SELECT * FROM todos WHERE is_completed = ?", isCompleted)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.scanTodos(rows)
+}
+
+func (r *repository) Update(id int, title string, completed bool) (*models.Todo, error) {
+	_, err := r.db.Exec("UPDATE todos SET title = ?, is_completed = ? WHERE id = ?", title, completed, id)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.GetById(id)
+}
+
+func (r *repository) Delete(id int) error {
+	_, err := r.db.Exec("DELETE FROM todos WHERE id = ?", id)
+	return err
+}
+
+func (r *repository) scanTodos(rows *sql.Rows) ([]*models.Todo, error) {
+	var todos []*models.Todo
+
 	for rows.Next() {
-		todo := Todo{}
-		err := rows.Scan(&todo.ID, &todo.Title, &todo.Completed)
+		var todo *models.Todo
+		err := rows.Scan(todo.ID, todo.AccountID, todo.Title, todo.IsCompleted)
 		if err != nil {
 			return nil, err
 		}
+
 		todos = append(todos, todo)
 	}
 
 	return todos, nil
 }
 
-func (t *TodoService) Get(id int) (Todo, error) {
-	todo := Todo{}
-	err := t.db.QueryRow("SELECT id, title, is_completed FROM todos WHERE id = $1", id).Scan(&todo.ID, &todo.Title, &todo.Completed)
+func (r *repository) scanTodo(row *sql.Row) (*models.Todo, error) {
+	var todo *models.Todo
+
+	err := row.Scan(todo.ID, todo.AccountID, todo.Title, todo.IsCompleted)
 	if err != nil {
-		return todo, err
+		return nil, err
 	}
 
 	return todo, nil
-}
-
-func (t *TodoService) Update(id int, title string, completed bool) error {
-	_, err := t.db.Exec("UPDATE todos SET title = $1, is_completed = $2 WHERE id = $3", title, completed, id)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (t *TodoService) Delete(id int) error {
-	_, err := t.db.Exec("DELETE FROM todos WHERE id = $1", id)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
