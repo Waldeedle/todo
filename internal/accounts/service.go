@@ -1,77 +1,41 @@
 package accounts
 
 import (
-	"database/sql"
-	"fmt"
-
 	"github.com/waldeedle/todo/internal/models"
 )
 
-type Repository interface {
+type Service interface {
 	Create(email string) (*models.Account, error)
-	GetById(id int64) (*models.Account, error)
+	GetById(id int) (*models.Account, error)
 	GetByEmail(email string) (*models.Account, error)
-	Update(id int64, email string) (*models.Account, error)
-	Delete(id int64) error
+	Update(id int, email string) (*models.Account, error)
+	Delete(id int) error
 }
 
-type repository struct {
-	db *sql.DB
+type service struct {
+	repository Repository
 }
 
-func NewRepository(db *sql.DB) Repository {
-	return &repository{
-		db: db,
-	}
+func NewService(repository Repository) Service {
+	return &service{repository}
 }
 
-const accountsTable = "accounts"
-
-func (r *repository) Create(email string) (*models.Account, error) {
-	result, err := r.db.Exec(fmt.Sprintf("INSERT INTO %s (email) VALUES (?)", accountsTable), email)
-	if err != nil {
-		return nil, err
-	}
-
-	id, err := result.LastInsertId()
-	if err != nil {
-		fmt.Println("Could not get last insert ID", err)
-		return nil, err
-	}
-
-	return r.GetById(id)
+func (s *service) Create(email string) (*models.Account, error) {
+	return s.repository.Create(email)
 }
 
-func (r *repository) GetById(id int64) (*models.Account, error) {
-	row := r.db.QueryRow(fmt.Sprintf("SELECT * FROM %s WHERE id = ?", accountsTable), id)
-	return r.scanAccount(row)
+func (s *service) GetById(id int) (*models.Account, error) {
+	return s.repository.GetById(id)
 }
 
-func (r *repository) GetByEmail(email string) (*models.Account, error) {
-	row := r.db.QueryRow(fmt.Sprintf("SELECT * FROM %s WHERE email = ?", accountsTable), email)
-	return r.scanAccount(row)
+func (s *service) GetByEmail(email string) (*models.Account, error) {
+	return s.repository.GetByEmail(email)
 }
 
-func (r *repository) Update(id int64, email string) (*models.Account, error) {
-	_, err := r.db.Exec(fmt.Sprintf("UPDATE %s SET email = ? WHERE id = ?", accountsTable), email, id)
-	if err != nil {
-		return nil, err
-	}
-
-	return r.GetById(id)
+func (s *service) Update(id int, email string) (*models.Account, error) {
+	return s.repository.Update(id, email)
 }
 
-func (r *repository) Delete(id int64) error {
-	_, err := r.db.Exec(fmt.Sprintf("DELETE FROM %s WHERE id = ?", accountsTable), id)
-	return err
-}
-
-func (r *repository) scanAccount(row *sql.Row) (*models.Account, error) {
-	var account *models.Account
-	err := row.Scan(account)
-	if err != nil {
-		return nil, err
-	}
-
-	return account, nil
+func (s *service) Delete(id int) error {
+	return s.repository.Delete(id)
 }

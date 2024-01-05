@@ -1,4 +1,4 @@
-package todo
+package todos
 
 import (
 	"database/sql"
@@ -23,9 +23,7 @@ type repository struct {
 }
 
 func NewRepository(db *sql.DB) Repository {
-	return &repository{
-		db: db,
-	}
+	return &repository{db}
 }
 
 const todosTable = "todos"

@@ -7,9 +7,12 @@ require (
 	github.com/labstack/echo-contrib v0.15.0
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/mattn/go-sqlite3 v1.14.19
+	google.golang.org/protobuf v1.28.1
+	sourcegraph.com/sourcegraph/prototools v0.0.0-20200525085923-a8c937889d1e
 )
 
 require (
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

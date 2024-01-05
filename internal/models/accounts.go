@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Account struct {
-	ID        *int64
+	ID        *int
 	Email     *string
 	IsDeleted *bool
 	CreatedAt *time.Time
@@ -11,7 +11,7 @@ type Account struct {
 	DeletedAt *time.Time
 }
 
-func (a *Account) GetID() *int64 {
+func (a *Account) GetID() *int {
 	if a == nil {
 		return nil
 	}

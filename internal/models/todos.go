@@ -3,8 +3,8 @@ package models
 import "time"
 
 type Todo struct {
-	ID          *int64
-	AccountID   *int64
+	ID          *int
+	AccountID   *int
 	Title       *string
 	IsCompleted *bool
 	//todo: potentially add an archive feature?? also perma delete option
@@ -14,7 +14,7 @@ type Todo struct {
 	DeletedAt *time.Time
 }
 
-func (t *Todo) GetID() *int64 {
+func (t *Todo) GetID() *int {
 	if t == nil {
 		return nil
 	}
@@ -22,7 +22,7 @@ func (t *Todo) GetID() *int64 {
 	return t.ID
 }
 
-func (t *Todo) GetAccountID() *int64 {
+func (t *Todo) GetAccountID() *int {
 	if t == nil {
 		return nil
 	}
