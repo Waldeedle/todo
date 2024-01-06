@@ -1,3 +1,4 @@
+# looking into migration tooling
 provision-local: ## provision local environment
 	if [ ! -f db/todo.db ]; then \
 		mkdir -p db \
