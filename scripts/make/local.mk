@@ -4,7 +4,7 @@ provision-local: ## provision local environment
 		mkdir -p db \
 		&& touch db/todo.db; \
 	fi; \
-	sqlite3 db/todo.db < db/schema.sql
+	goose sqlite3 db/todo.db up
 
 build: ## build the service
 	templ generate \
