@@ -27,8 +27,9 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 		return HTML(c, templates.Page())
 	})
 
-	todosGroup := e.Group("/todos")
-	todosGroup.GET("", api.todos.GetAll())
+	// todosGroup := e.Group("/todos")
+	//need handler maybe?
+	// todosGroup.GET("", api.todos.Get(1))
 
 	return nil
 }
