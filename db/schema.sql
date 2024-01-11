@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `todos` (
   `is_deleted` INTEGER NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
-  `deleted_at` DATETIME NOT NULL
+  `deleted_at` DATETIME NULL
 );
 
 CREATE TABLE IF NOT EXISTS `accounts` (
@@ -15,5 +15,5 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `is_deleted` INTEGER NOT NULL DEFAULT 0,
   `created_at` DATETIME NOT NULL,
   `updated_at` DATETIME NOT NULL,
-  `deleted_at` DATETIME NOT NULL
+  `deleted_at` DATETIME NULL
 );

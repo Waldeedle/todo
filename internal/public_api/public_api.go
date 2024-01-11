@@ -27,9 +27,15 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 		return HTML(c, templates.Page())
 	})
 
-	// todosGroup := e.Group("/todos")
+	todosGroup := e.Group("/todos")
 	//need handler maybe?
-	// todosGroup.GET("", api.todos.Get(1))
+	todosGroup.POST("/create", func(c echo.Context) error {
+		_, err := api.todos.Create(c.FormValue("title"))
+		if err != nil {
+			return err
+		}
+		return HTML(c, templates.Success())
+	})
 
 	return nil
 }
