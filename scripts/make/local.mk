@@ -18,6 +18,7 @@ run: ## run the service
 deploy: ## deploy the service
 	make build
 	scp ./cmd/todo/bin/todo waldeedle@ssh-waldeedle.alwaysdata.net:
+	scp -r ./internal/assets/* waldeedle@ssh-waldeedle.alwaysdata.net:static/
 
 css: ## build minified css
 	tailwindcss -i $(ROOT_PATH)/internal/assets/input.css -o $(ROOT_PATH)/internal/assets/output.css --minify
