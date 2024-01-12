@@ -2,6 +2,7 @@ package todos
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/waldeedle/todo/internal/models"
 )
@@ -29,7 +30,7 @@ func NewRepository(db *sql.DB) Repository {
 const todosTable = "todos"
 
 func (r *repository) Create(title string) (*models.Todo, error) {
-	result, err := r.db.Exec("INSERT INTO todos (title) VALUES (?)", title)
+	result, err := r.db.Exec("INSERT INTO todos (account_id, title, created_at, updated_at) VALUES (0, ?, ?, ?)", title, time.Now().Format(time.DateTime), time.Now().Format(time.DateTime))
 	if err != nil {
 		return nil, err
 	}
@@ -106,12 +107,12 @@ func (r *repository) scanTodos(rows *sql.Rows) ([]*models.Todo, error) {
 }
 
 func (r *repository) scanTodo(row *sql.Row) (*models.Todo, error) {
-	var todo *models.Todo
+	todo := models.Todo{}
 
-	err := row.Scan(todo.ID, todo.AccountID, todo.Title, todo.IsCompleted)
+	err := row.Scan(&todo.ID, &todo.AccountID, &todo.Title, &todo.IsCompleted, &todo.IsDeleted, &todo.CreatedAt, &todo.UpdatedAt, &todo.DeletedAt)
 	if err != nil {
 		return nil, err
 	}
 
-	return todo, nil
+	return &todo, nil
 }
