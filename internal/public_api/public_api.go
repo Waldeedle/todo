@@ -32,7 +32,7 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	todosGroup.POST("/create", func(c echo.Context) error {
 		_, err := api.todos.Create(c.FormValue("title"))
 		if err != nil {
-			return err
+			return HTML(c, templates.Error(err))
 		}
 		return HTML(c, templates.Success())
 	})

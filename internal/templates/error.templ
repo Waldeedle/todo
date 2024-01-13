@@ -1,0 +1,9 @@
+package templates
+
+templ Error (err error) {
+	<div class="toast">
+		<div class="alert alert-danger" role="alert">
+			<span>{ err.Error() }</span>
+		</div>
+	</div>
+}
