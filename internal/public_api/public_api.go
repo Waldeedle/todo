@@ -30,11 +30,13 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	todosGroup := e.Group("/todos")
 	//need handler maybe?
 	todosGroup.POST("/create", func(c echo.Context) error {
-		_, err := api.todos.Create(c.FormValue("title"))
+		todo, err := api.todos.Create(c.FormValue("title"))
 		if err != nil {
 			return HTML(c, templates.Error(err))
 		}
-		return HTML(c, templates.Success())
+		var titles []string
+		titles = append(titles, *todo.Title)
+		return HTML(c, templates.List(titles))
 	})
 
 	return nil
