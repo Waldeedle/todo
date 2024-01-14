@@ -12,6 +12,10 @@ type Service interface {
 	Delete(id int) error
 }
 
+//todo: use uber mock
+//todo: implement dead code checker
+//todo: implement posthog later when complexity increases
+
 type service struct {
 	repository Repository
 }
