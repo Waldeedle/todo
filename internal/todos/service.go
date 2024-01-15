@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=../mocks/todos/service.go -package=mock_todos github.com/waldeedle/todo/internal/todos Service
+
 package todos
 
 import (
