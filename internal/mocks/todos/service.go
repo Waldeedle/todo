@@ -99,16 +99,16 @@ func (mr *MockServiceMockRecorder) GetAll() *gomock.Call {
 }
 
 // Update mocks base method.
-func (m *MockService) Update(arg0 int, arg1 string, arg2 bool) (*models.Todo, error) {
+func (m *MockService) Update(arg0 *models.Todo) (*models.Todo, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "Update", arg0)
 	ret0, _ := ret[0].(*models.Todo)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockServiceMockRecorder) Update(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockServiceMockRecorder) Update(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockService)(nil).Update), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockService)(nil).Update), arg0)
 }

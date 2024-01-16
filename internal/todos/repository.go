@@ -17,7 +17,7 @@ type Repository interface {
 	//todo: potentially add partial title search
 	GetByTitle(title string) (*models.Todo, error)
 	GetByIsCompleted(isCompleted bool) ([]*models.Todo, error)
-	Update(id int, title string, completed bool) (*models.Todo, error)
+	Update(updatedTodo *models.Todo) (*models.Todo, error)
 	Delete(id int) error
 }
 
@@ -78,13 +78,31 @@ func (r *repository) GetByIsCompleted(isCompleted bool) ([]*models.Todo, error) 
 	return r.scanTodos(rows)
 }
 
-func (r *repository) Update(id int, title string, completed bool) (*models.Todo, error) {
-	_, err := r.db.Exec("UPDATE todos SET title = ?, is_completed = ? WHERE id = ?", title, completed, id)
+func (r *repository) Update(updatedTodo *models.Todo) (*models.Todo, error) {
+	_, err := r.db.Exec(`UPDATE todos
+		SET
+			account_id = ?,
+			title = ?,
+			is_completed = ?,
+			is_deleted = ?,
+			created_at = ?,
+			updated_at = ?,
+			deleted_at = ?
+		WHERE id = ?`,
+		updatedTodo.GetAccountID(),
+		updatedTodo.GetTitle(),
+		updatedTodo.GetIsCompleted(),
+		updatedTodo.GetIsDeleted(),
+		updatedTodo.GetCreatedAt(),
+		updatedTodo.GetUpdatedAt(),
+		updatedTodo.GetDeletedAt(),
+		updatedTodo.GetID(),
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return r.GetById(id)
+	return r.GetById(*updatedTodo.GetID())
 }
 
 func (r *repository) Delete(id int) error {
