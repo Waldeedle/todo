@@ -1,0 +1,21 @@
+package components
+
+import (
+	"fmt"
+)
+
+templ list(props ListComponentProps) {
+	for _, item := range props.Items {
+		<div class="card w-96 bg-primary text-primary-content">
+			<div class="card-body">
+				<p>{ fmt.Sprint(item) }</p>
+			</div>
+		</div>
+	}
+	if props.ToastType != ToastType(0) {
+		{! Toast(ToastComponentProps{
+			Message: props.ToastMessage,
+			Type: props.ToastType,
+		}) }
+	}
+}

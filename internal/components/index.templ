@@ -1,8 +1,8 @@
-package templates
+package components
 
 // todo : can now use react components in here
 
-templ Page () {
+templ page() {
 	<html lang="en">
 		<head>
 			<meta charset="utf-8"/>
@@ -15,7 +15,7 @@ templ Page () {
 			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
 		<body class="container max-w-wl mx-auto">
-			{! Header() }
+			{! header() }
 			<form class="grid grid-cols-7 m-4 gap-2">
 				<input class="col-span-5 input input-bordered" type="text" name="title" placeholder="What are we doing?" label="title"/>
 				<button
@@ -28,7 +28,7 @@ templ Page () {
 				</button>
 			</form>
 			<div id="todos" class="my-8"></div>
-			{! Footer() }
+			{! footer() }
 		</body>
 	</html>
 }

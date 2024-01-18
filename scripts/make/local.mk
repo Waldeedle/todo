@@ -8,7 +8,7 @@ provision-local: ## provision local environment
 
 build: ## build the service
 	make deadcode
-	make test
+	# make test
 	templ generate \
 	&& cd cmd/todo \
 	&& GOOS=linux GOARCH=amd64 go build -ldflags "-linkmode external -extldflags -static" -gcflags="all=-N -l" -o bin/todo

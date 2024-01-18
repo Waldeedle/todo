@@ -4,7 +4,7 @@ import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/waldeedle/todo/internal/accounts"
-	"github.com/waldeedle/todo/internal/templates"
+	"github.com/waldeedle/todo/internal/components"
 	"github.com/waldeedle/todo/internal/todos"
 )
 
@@ -24,7 +24,7 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	e.Static("/static", "internal/assets")
 
 	e.GET("/", func(c echo.Context) error {
-		return HTML(c, templates.Page())
+		return HTML(c, components.Page())
 	})
 
 	todosGroup := e.Group("/todos")
@@ -32,11 +32,16 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	todosGroup.POST("/create", func(c echo.Context) error {
 		todo, err := api.todos.Create(c.FormValue("title"))
 		if err != nil {
-			return HTML(c, templates.Error(err))
+			return HTML(c, components.Toast(components.ToastComponentProps{
+				Message: err.Error(),
+				Type:    components.ToastTypeError}))
 		}
 		var titles []string
 		titles = append(titles, *todo.Title)
-		return HTML(c, templates.List(titles))
+		return HTML(c, components.List(components.ListComponentProps{
+			Items:     titles,
+			ToastType: components.ToastTypeSuccess,
+		}))
 	})
 
 	return nil
