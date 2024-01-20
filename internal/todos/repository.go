@@ -114,13 +114,13 @@ func (r *repository) scanTodos(rows *sql.Rows) ([]*models.Todo, error) {
 	var todos []*models.Todo
 
 	for rows.Next() {
-		var todo *models.Todo
-		err := rows.Scan(todo.ID, todo.AccountID, todo.Title, todo.IsCompleted)
+		todo := models.Todo{}
+		err := rows.Scan(&todo.ID, &todo.AccountID, &todo.Title, &todo.IsCompleted, &todo.IsDeleted, &todo.CreatedAt, &todo.UpdatedAt, &todo.DeletedAt)
 		if err != nil {
 			return nil, err
 		}
 
-		todos = append(todos, todo)
+		todos = append(todos, &todo)
 	}
 
 	return todos, nil

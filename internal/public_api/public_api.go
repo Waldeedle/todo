@@ -24,7 +24,13 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	e.Static("/static", "internal/assets")
 
 	e.GET("/", func(c echo.Context) error {
-		return HTML(c, components.Page())
+		todos, err := api.todos.GetAll()
+		if err != nil {
+			return HTML(c, components.Toast(components.ToastComponentProps{
+				Message: err.Error(),
+				Type:    components.ToastTypeError}))
+		}
+		return HTML(c, components.Index(todos))
 	})
 
 	todosGroup := e.Group("/todos")

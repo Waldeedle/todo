@@ -5,13 +5,15 @@ import (
 )
 
 templ list(props ListComponentProps) {
-	for _, item := range props.Items {
-		<div class="card w-96 bg-primary text-primary-content">
-			<div class="card-body">
-				<p>{ fmt.Sprint(item) }</p>
+	<div class="grid grid-cols-4 gap-4">
+		for _, item := range props.Items {
+			<div class="card bg-primary text-primary-content">
+				<div class="card-body">
+					<p>{ fmt.Sprint(item) }</p>
+				</div>
 			</div>
-		</div>
-	}
+		}
+	</div>
 	if props.ToastType != ToastType(0) {
 		{! Toast(ToastComponentProps{
 			Message: props.ToastMessage,
