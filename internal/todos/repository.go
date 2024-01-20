@@ -46,7 +46,7 @@ func (r *repository) Create(title string) (*models.Todo, error) {
 }
 
 func (r *repository) GetAll() ([]*models.Todo, error) {
-	rows, err := r.db.Query("SELECT * FROM todos")
+	rows, err := r.db.Query("SELECT * FROM todos ORDER BY created_at DESC")
 	if err != nil {
 		return nil, err
 	}

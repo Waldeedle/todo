@@ -36,14 +36,23 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	todosGroup := e.Group("/todos")
 	//need handler maybe?
 	todosGroup.POST("/create", func(c echo.Context) error {
-		todo, err := api.todos.Create(c.FormValue("title"))
+		//todo: do something with this todo or seperate the list?
+		_, err := api.todos.Create(c.FormValue("title"))
+		if err != nil {
+			return HTML(c, components.Toast(components.ToastComponentProps{
+				Message: err.Error(),
+				Type:    components.ToastTypeError}))
+		}
+		todos, err := api.todos.GetAll()
 		if err != nil {
 			return HTML(c, components.Toast(components.ToastComponentProps{
 				Message: err.Error(),
 				Type:    components.ToastTypeError}))
 		}
 		var titles []string
-		titles = append(titles, *todo.Title)
+		for _, todo := range todos {
+			titles = append(titles, *todo.Title)
+		}
 		return HTML(c, components.List(components.ListComponentProps{
 			Items:     titles,
 			ToastType: components.ToastTypeSuccess,
