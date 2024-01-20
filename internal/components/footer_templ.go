@@ -23,7 +23,7 @@ func footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"footer footer-center p-4 bg-base-300 text-base-content\"><aside><a class=\"italic tracking-wider hover:text-sky-500 ease-in duration-300\" href=\"https://github.com/Waldeedle\" target=\"_blank\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<footer class=\"footer footer-center p-4 bg-base-300 text-base-content fixed inset-x-0 bottom-0\"><aside><a class=\"italic tracking-wider hover:text-sky-500 ease-in duration-300\" href=\"https://github.com/Waldeedle\" target=\"_blank\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
