@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=../mocks/todos/service.go -package=mock_todos github.com/waldeedle/todo/internal/todos Service
+
 package todos
 
 import (
@@ -8,9 +10,11 @@ type Service interface {
 	Create(title string) (*models.Todo, error)
 	Get(id int) (*models.Todo, error)
 	GetAll() ([]*models.Todo, error)
-	Update(id int, title string, completed bool) (*models.Todo, error)
+	Update(updatedTodo *models.Todo) (*models.Todo, error)
 	Delete(id int) error
 }
+
+//todo: implement posthog later when complexity increases
 
 type service struct {
 	repository Repository
@@ -32,8 +36,8 @@ func (s *service) GetAll() ([]*models.Todo, error) {
 	return s.repository.GetAll()
 }
 
-func (s *service) Update(id int, title string, completed bool) (*models.Todo, error) {
-	return s.repository.Update(id, title, completed)
+func (s *service) Update(updatedTodo *models.Todo) (*models.Todo, error) {
+	return s.repository.Update(updatedTodo)
 }
 
 func (s *service) Delete(id int) error {

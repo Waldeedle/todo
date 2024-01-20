@@ -53,3 +53,27 @@ func (t *Todo) GetIsDeleted() *bool {
 
 	return t.IsDeleted
 }
+
+func (t *Todo) GetCreatedAt() *time.Time {
+	if t == nil {
+		return nil
+	}
+
+	return t.CreatedAt
+}
+
+func (t *Todo) GetUpdatedAt() *time.Time {
+	if t == nil {
+		return nil
+	}
+
+	return t.UpdatedAt
+}
+
+func (t *Todo) GetDeletedAt() *time.Time {
+	if t == nil {
+		return nil
+	}
+
+	return t.DeletedAt
+}

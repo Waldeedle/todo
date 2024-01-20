@@ -1,3 +1,5 @@
+//go:generate mockgen -destination=../mocks/todos/repository.go -package=mock_todos github.com/waldeedle/todo/internal/todos Repository
+
 package todos
 
 import (
@@ -15,7 +17,7 @@ type Repository interface {
 	//todo: potentially add partial title search
 	GetByTitle(title string) (*models.Todo, error)
 	GetByIsCompleted(isCompleted bool) ([]*models.Todo, error)
-	Update(id int, title string, completed bool) (*models.Todo, error)
+	Update(updatedTodo *models.Todo) (*models.Todo, error)
 	Delete(id int) error
 }
 
@@ -44,7 +46,7 @@ func (r *repository) Create(title string) (*models.Todo, error) {
 }
 
 func (r *repository) GetAll() ([]*models.Todo, error) {
-	rows, err := r.db.Query("SELECT * FROM todos")
+	rows, err := r.db.Query("SELECT * FROM todos ORDER BY created_at DESC")
 	if err != nil {
 		return nil, err
 	}
@@ -76,13 +78,31 @@ func (r *repository) GetByIsCompleted(isCompleted bool) ([]*models.Todo, error) 
 	return r.scanTodos(rows)
 }
 
-func (r *repository) Update(id int, title string, completed bool) (*models.Todo, error) {
-	_, err := r.db.Exec("UPDATE todos SET title = ?, is_completed = ? WHERE id = ?", title, completed, id)
+func (r *repository) Update(updatedTodo *models.Todo) (*models.Todo, error) {
+	_, err := r.db.Exec(`UPDATE todos
+		SET
+			account_id = ?,
+			title = ?,
+			is_completed = ?,
+			is_deleted = ?,
+			created_at = ?,
+			updated_at = ?,
+			deleted_at = ?
+		WHERE id = ?`,
+		updatedTodo.GetAccountID(),
+		updatedTodo.GetTitle(),
+		updatedTodo.GetIsCompleted(),
+		updatedTodo.GetIsDeleted(),
+		updatedTodo.GetCreatedAt(),
+		updatedTodo.GetUpdatedAt(),
+		updatedTodo.GetDeletedAt(),
+		updatedTodo.GetID(),
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return r.GetById(id)
+	return r.GetById(*updatedTodo.GetID())
 }
 
 func (r *repository) Delete(id int) error {
@@ -94,13 +114,13 @@ func (r *repository) scanTodos(rows *sql.Rows) ([]*models.Todo, error) {
 	var todos []*models.Todo
 
 	for rows.Next() {
-		var todo *models.Todo
-		err := rows.Scan(todo.ID, todo.AccountID, todo.Title, todo.IsCompleted)
+		todo := models.Todo{}
+		err := rows.Scan(&todo.ID, &todo.AccountID, &todo.Title, &todo.IsCompleted, &todo.IsDeleted, &todo.CreatedAt, &todo.UpdatedAt, &todo.DeletedAt)
 		if err != nil {
 			return nil, err
 		}
 
-		todos = append(todos, todo)
+		todos = append(todos, &todo)
 	}
 
 	return todos, nil
