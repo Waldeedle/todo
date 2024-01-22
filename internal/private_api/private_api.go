@@ -13,6 +13,8 @@ func AddRoutes(e *echo.Echo) error {
 	//Add pprof routes
 	pprof.Register(e, "/tools/pprof")
 
+	//add twirp and implement private api for management of accounts and todos
+
 	//Add custom routes
 	tools.GET("", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Shhhhh Secret Tools 🤫!")
