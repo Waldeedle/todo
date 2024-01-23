@@ -15,6 +15,7 @@ type Service interface {
 }
 
 //todo: implement posthog later when complexity increases
+//todo: wrap errors with errors.Wrap(err, "error message")
 
 type service struct {
 	repository Repository

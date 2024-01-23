@@ -1,21 +1,20 @@
-package handlers
+// package public_api
 
 // import (
-// 	"net/http"
-
-// 	"github.com/a-h/templ"
 // 	"github.com/labstack/echo/v4"
-// 	"github.com/waldeedle/todo/internal/templates"
-// 	"github.com/waldeedle/todo/internal/todo"
+// 	"github.com/waldeedle/todo/internal/todos"
+// 	"github.com/waldeedle/todo/internal/accounts"
 // )
 
 // type TodoHandler struct {
-// 	todoService todo.Repository
+// 	todos todos.Repository
+// 	accounts accounts.Repository
 // }
 
-// func NewTodoHandler(e *echo.Echo, todoService todo.Repository) {
+// func NewTodoHandler(e *echo.Echo, todoService todos.Repository, accounts accounts.Repository) {
 // 	todoHandler := &TodoHandler{
-// 		todoService: todoService,
+// 		todos:    todoService,
+// 		accounts: accounts,
 // 	}
 
 // 	e.POST("/create", todoHandler.CreateHandler)

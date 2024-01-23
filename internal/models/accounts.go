@@ -4,6 +4,8 @@ import "time"
 
 type Account struct {
 	ID        *int
+	FirstName *string
+	LastName  *string
 	Email     *string
 	IsDeleted *bool
 	CreatedAt *time.Time
@@ -17,6 +19,22 @@ func (a *Account) GetID() *int {
 	}
 
 	return a.ID
+}
+
+func (a *Account) GetFirstName() *string {
+	if a == nil {
+		return nil
+	}
+
+	return a.FirstName
+}
+
+func (a *Account) GetLastName() *string {
+	if a == nil {
+		return nil
+	}
+
+	return a.LastName
 }
 
 func (a *Account) GetEmail() *string {
