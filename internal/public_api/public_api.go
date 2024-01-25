@@ -20,6 +20,7 @@ func New(accounts accounts.Service, todos todos.Service) API {
 	}
 }
 
+// todo: add account routes
 func (api *API) AddRoutes(e *echo.Echo) error {
 	e.Static("/static", "internal/assets")
 
