@@ -14,6 +14,7 @@ func AddRoutes(e *echo.Echo) error {
 	pprof.Register(e, "/tools/pprof")
 
 	//add twirp and implement private api for management of accounts and todos
+	// try to implement a different microservice for the private api to be used
 
 	//Add custom routes
 	tools.GET("", func(c echo.Context) error {
