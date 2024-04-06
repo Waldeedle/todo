@@ -10,7 +10,11 @@ import "context"
 import "io"
 import "bytes"
 
+import "github.com/waldeedle/todo/internal/models"
+
 // todo : can now use react components in here
+
+var userFirstName = "Waleed"
 
 func index(titles []string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -25,7 +29,7 @@ func index(titles []string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"icon\" type=\"image/x-icon\" href=\"static/favicon.ico\"><title>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -34,7 +38,7 @@ func index(titles []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><script src=\"static/js/htmx.min.js\" type=\"text/javascript\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</title><meta property=\"og:title\" content=\"Todo App\"><meta property=\"og:description\" content=\"A place to organize all your todos\"><meta proerty=\"og:site_name\" content=\"Todo App\"><meta proerty=\"og:locale\" content=\"en_US\"><meta proerty=\"og:image:type\" content=\"image/png\"><meta proerty=\"og:image:width\" content=\"1200\"><meta proerty=\"og:image:height\" content=\"630\"><meta property=\"og:image\" content=\"https://waldeedle.alwaysdata.net/static/logo.png\"><meta property=\"og:type\" content=\"website\"><meta name=\"twitter:card\" content=\"summary_large_image\"><meta name=\"twitter:title\" content=\"Todo App\"><meta name=\"twitter:description\" content=\"A place to organize all your todos\"><meta name=\"twitter:image:type\" content=\"image/png\"><meta name=\"twitter:image:width\" content=\"1200\"><meta name=\"twitter:image:height\" content=\"630\"><meta name=\"twitter:image\" content=\"https://waldeedle.alwaysdata.net/static/logo.png\"><link rel=\"icon\" href=\"static/favicon.ico\" type=\"image/x-icon\" sizes=\"256x256\"><script src=\"static/js/htmx.min.js\" type=\"text/javascript\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -56,7 +60,7 @@ func index(titles []string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = header().Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = header(&models.Account{FirstName: &userFirstName}).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

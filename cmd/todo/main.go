@@ -19,6 +19,7 @@ func main() {
 
 	todoRepository := todos.NewRepository(db)
 	todoService := todos.NewService(todoRepository)
+	//add accounts repo
 	publicAPI := public_api.New(nil, todoService)
 
 	err = publicAPI.AddRoutes(e)
