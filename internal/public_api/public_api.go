@@ -20,6 +20,7 @@ func New(accounts accounts.Service, todos todos.Service) API {
 	}
 }
 
+// todo: add account routes
 func (api *API) AddRoutes(e *echo.Echo) error {
 	e.Static("/static", "internal/assets")
 
@@ -35,6 +36,7 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 
 	todosGroup := e.Group("/todos")
 	//need handler maybe?
+	//todo: do some research on better componentization of the templates
 	todosGroup.POST("/create", func(c echo.Context) error {
 		//todo: do something with this todo or seperate the list?
 		_, err := api.todos.Create(c.FormValue("title"))
