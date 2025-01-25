@@ -1,15 +1,13 @@
-package components
+package ui
 
 import "github.com/waldeedle/todo/internal/models"
 
-// todo : can now use react components in here
-
 var userFirstName = "Waleed"
 
-templ index(titles []string) {
+templ Index() {
 	<html lang="en">
 		<head>
-			<meta charset="utf-8"/>
+			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>My First HTMX Page</title>
 			<meta property="og:title" content="Todo App"/>
@@ -29,30 +27,43 @@ templ index(titles []string) {
 			<meta name="twitter:image:height" content="630"/>
 			<meta name="twitter:image" content="https://waldeedle.alwaysdata.net/static/logo.png"/>
 			<link rel="icon" href="static/favicon.ico" type="image/x-icon" sizes="256x256"/>
+			<style>[x-cloak]{display:none}</style>
 			<script src="static/js/htmx.min.js" type="text/javascript"></script>
+			<script src="https://unpkg.com/alpinejs" defer></script>
 			//todo: update build process to remove unused css
-			<link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css"/>
 			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
 		<body>
 			{! header(&models.Account{FirstName: &userFirstName}) }
-			<div class="container max-w-wl mx-auto">
-				<form class="grid grid-cols-7 m-4 gap-2">
-					<input class="col-span-5 input input-bordered" type="text" name="title" placeholder="What are we doing?" label="title"/>
+			// <button hx-get="/test2" hx-target="#content" hx-swap="beforeend">test</button>
+			<div id="content" class="container max-w-wl mx-auto">
+				<div
+ 					x-data="{
+							title: '',
+							description: '',
+							type: 'default',
+							position: 'top-center',
+							expanded: false,
+							popToast (custom){
+								let html = '';
+								if(typeof custom != 'undefined'){
+									html = custom;
+								}
+								toast(this.title, { description: this.description, type: this.type, position: this.position, html: html })
+							}
+						}"
+ 					class="relative space-y-5"
+				>
 					<button
- 						class="btn btn-accent col-span-2"
- 						hx-post="/todos/create"
- 						hx-target="#todos"
- 						hx-swap="innerHTML"
-					>
-						Create Todo
-					</button>
-				</form>
-				<div id="todos" class="my-8">
-					{! list(ListComponentProps{Items: titles}) }
+ 						hx-get="/test2"
+ 						hx-swap="none"
+ 						hx-on::after-swap="window.dispatchEvent(new CustomEvent('toast-show', { detail : { type: 'default', message: 'test', description: 'dest', position : 'top-center' }}))"
+ 						:class="{ 'ring-2 ring-neutral-200/60' : type=='default' && description=='' }"
+ 						class="inline-flex items-center justify-center flex-shrink-0 px-3 py-1 text-xs font-medium transition-colors border rounded-md h-9 hover:bg-gray-50 active:bg-white focus:bg-white focus:outline-none"
+					>Default</button>
 				</div>
 			</div>
+			{! Toast() }
 		</body>
-		{! footer() }
 	</html>
 }

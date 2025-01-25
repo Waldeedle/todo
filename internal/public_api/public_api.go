@@ -4,8 +4,8 @@ import (
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 	"github.com/waldeedle/todo/internal/accounts"
-	"github.com/waldeedle/todo/internal/components"
 	"github.com/waldeedle/todo/internal/todos"
+	"github.com/waldeedle/todo/internal/ui"
 )
 
 type API struct {
@@ -25,40 +25,11 @@ func (api *API) AddRoutes(e *echo.Echo) error {
 	e.Static("/static", "internal/assets")
 
 	e.GET("/", func(c echo.Context) error {
-		todos, err := api.todos.GetAll()
-		if err != nil {
-			return HTML(c, components.Toast(components.ToastComponentProps{
-				Message: err.Error(),
-				Type:    components.ToastTypeError}))
-		}
-		return HTML(c, components.Index(todos))
+		return HTML(c, ui.Index())
 	})
 
-	todosGroup := e.Group("/todos")
-	//need handler maybe?
-	//todo: do some research on better componentization of the templates
-	todosGroup.POST("/create", func(c echo.Context) error {
-		//todo: do something with this todo or seperate the list?
-		_, err := api.todos.Create(c.FormValue("title"))
-		if err != nil {
-			return HTML(c, components.Toast(components.ToastComponentProps{
-				Message: err.Error(),
-				Type:    components.ToastTypeError}))
-		}
-		todos, err := api.todos.GetAll()
-		if err != nil {
-			return HTML(c, components.Toast(components.ToastComponentProps{
-				Message: err.Error(),
-				Type:    components.ToastTypeError}))
-		}
-		var titles []string
-		for _, todo := range todos {
-			titles = append(titles, *todo.Title)
-		}
-		return HTML(c, components.List(components.ListComponentProps{
-			Items:     titles,
-			ToastType: components.ToastTypeSuccess,
-		}))
+	e.GET("/test2", func(c echo.Context) error {
+		return HTML(c, ui.JsTest())
 	})
 
 	return nil
